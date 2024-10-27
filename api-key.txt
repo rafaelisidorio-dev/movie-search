@@ -1,1 +1,4 @@
-4ca5ce0b
+apikey: 4ca5ce0b
+
+Search by title:
+  https://www.omdbapi.com/?apikey=4ca5ce0b&t=blade+runner
