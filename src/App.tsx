@@ -1,52 +1,57 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface MoviesProps {
-  Title: string
-  Poster: string
-  Year: string
+  title: string;
+  poster_path: string;
+  release_date: string;
 }
 
 export function App() {
-  const [movies, setMovies] = useState<MoviesProps[]>([])
-  const [inputText, setInputText] = useState('')
+  const [movies, setMovies] = useState<MoviesProps[]>([]);
 
-  // const movieName = ""
+  function getMovies() {
+    axios({
+      method: "get",
+      url: "https://api.themoviedb.org/3/discover/movie",
+      params: {
+        api_key: "0a402cff78047e395e95defbf2f582ba",
+      },
+    }).then((response) => {
+      console.log(response.data.results);
+      setMovies(response.data.results);
+    });
+  }
 
   useEffect(() => {
-    fetch(`https://www.omdbapi.com/?apikey=4ca5ce0b&s=${inputText}`)
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data.Search)
-        setMovies(data.Search)
-      })
-      .catch(err => console.log(err.message))
-  }, [])
-
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    event.preventDefault()
-    setInputText(event.target.value)
-  }
+    getMovies();
+  }, []);
 
   return (
     <>
       <header className="text-center mt-4">
         <form>
-          <input className="mr-2 text-black" type="text" value={inputText} onChange={handleInputChange} placeholder="Type the movie name..." />
+          <input
+            className="mr-2 text-black"
+            type="text"
+            placeholder="Type the movie name..."
+          />
           <button type="submit">Search</button>
         </form>
       </header>
 
-      {inputText.length > 0 ?
-        <main className="m-4 flex-wrap h-screen flex justify-center items-center gap-8">
-          {movies.map((movie, index) => (
-            <div className="w-56 h-80" key={index}>
-              <h2 className="text-center">{movie.Title}</h2>
-              <img className="object-cover w-full h-64" src={movie.Poster} />
-              <span className="flex justify-center">{movie.Year}</span>
-            </div>
-          ))}
-        </main> : <h1 className="text-center mt-4">{inputText}</h1>
-      }
+      <main className="m-4 flex-wrap h-screen flex justify-center items-center gap-8">
+        {movies.map((movie, index) => (
+          <div className="w-56 h-80" key={index}>
+            <h2 className="text-center">{movie.title}</h2>
+            <img
+              className="object-cover w-full h-64"
+              src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+            />
+            <span className="flex justify-center">{movie.release_date}</span>
+          </div>
+        ))}
+      </main>
     </>
-  )
+  );
 }

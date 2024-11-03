@@ -1,4 +1,4 @@
-apikey: 4ca5ce0b
+apikey: 0a402cff78047e395e95defbf2f582ba
 
-Search by title:
-  https://www.omdbapi.com/?apikey=4ca5ce0b&t=blade+runner
+token api to reading access:
+  eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYTQwMmNmZjc4MDQ3ZTM5NWU5NWRlZmJmMmY1ODJiYSIsIm5iZiI6MTczMDY2OTgxMS42NzgyNzQyLCJzdWIiOiI2NzI3ZWI4MDUzMDliOGE1YjA0NmZiZTYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.H86w3njiB9yq3UUIwaIn7mBPMY_1S2L6z1lqN_jAkeQ
