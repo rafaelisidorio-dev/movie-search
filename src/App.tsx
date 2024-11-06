@@ -1,15 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface MoviesProps {
   title: string;
   poster_path: string;
   release_date: string;
+  vote_average: number;
 }
 
 export function App() {
   const [movies, setMovies] = useState<MoviesProps[]>([]);
-  let [pageNum, setPageNum] = useState(1);
 
   function getMovies() {
     axios({
@@ -17,31 +19,17 @@ export function App() {
       url: "https://api.themoviedb.org/3/discover/movie",
       params: {
         api_key: "0a402cff78047e395e95defbf2f582ba",
-        page: pageNum,
+        language: "pt-BR"
       },
     }).then((response) => {
-      console.log(response.data.results);
       setMovies(response.data.results);
+      console.log(response.data.results);
     });
   }
 
   useEffect(() => {
     getMovies();
   }, []);
-
-  function previousPage() {
-    if (pageNum >= 2) {
-      setPageNum((pageNum -= 1));
-      getMovies();
-    }
-    console.log(pageNum)
-  }
-
-  function nextPage() {
-    setPageNum((pageNum += 1));
-    getMovies();
-    console.log(pageNum)
-  }
 
   return (
     <>
@@ -86,21 +74,17 @@ export function App() {
 
       <ul className="max-w-7xl my-4 mx-auto flex justify-between flex-wrap">
         {movies.map((movie, index) => (
-          <li className="w-56 h-80" key={index}>
-            <h2 className="text-center">{movie.title}</h2>
+          <li className="w-56 h-85" key={index}>
             <img
               className="object-cover w-full h-64"
               src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
             />
-            <span className="flex justify-center">{movie.release_date}</span>
+            <span>{movie.vote_average}%</span>
+            <h2 className="font-bold">{movie.title}</h2>
+            <span>{format(movie.release_date, { locale: ptBR })}</span>
           </li>
         ))}
       </ul>
-
-      <div className="flex justify-center items-center gap-2">
-        <button onClick={previousPage}>Previous Page</button>
-        <button onClick={nextPage}>Next Page</button>
-      </div>
     </>
   );
 }
