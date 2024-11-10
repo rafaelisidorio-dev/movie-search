@@ -19,7 +19,7 @@ export function App() {
       url: "https://api.themoviedb.org/3/discover/movie",
       params: {
         api_key: "0a402cff78047e395e95defbf2f582ba",
-        language: "pt-BR"
+        language: "pt-BR",
       },
     }).then((response) => {
       setMovies(response.data.results);
@@ -81,7 +81,11 @@ export function App() {
             />
             <span>{movie.vote_average}%</span>
             <h2 className="font-bold">{movie.title}</h2>
-            <span>{format(movie.release_date, { locale: ptBR })}</span>
+            <span>
+              {format(movie.release_date, "dd 'de' MMMM 'de' yyyy", {
+                locale: ptBR,
+              })}
+            </span>
           </li>
         ))}
       </ul>
