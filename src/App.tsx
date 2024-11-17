@@ -13,6 +13,8 @@ export interface MovieProps {
 export function App() {
   const [movies, setMovies] = useState<MovieProps[]>([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1)
+  const [moviesPerPage, setMoviesPerPage] = useState(20)
 
   function getMovies() {
     setLoading(true);
@@ -33,6 +35,11 @@ export function App() {
   useEffect(() => {
     getMovies();
   }, []);
+
+  // Get current movies
+  const indexOfLastMovie = currentPage * moviesPerPage
+  const indexOfFirstMovie = indexOfLastMovie - moviesPerPage
+  const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie)
 
   return (
     <>
@@ -55,7 +62,7 @@ export function App() {
         </nav>
       </header>
 
-      <Movies movies={movies} loading={loading} />
+      <Movies movies={currentMovies} loading={loading} />
     </>
   );
 }
