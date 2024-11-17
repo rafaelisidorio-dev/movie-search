@@ -1,10 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import Logo from "./logo.svg"
+import Logo from "./logo.svg";
+import { Movies } from "./components/Movies";
 
-interface MoviesProps {
+export interface MovieProps {
   title: string;
   poster_path: string;
   release_date: string;
@@ -12,9 +11,12 @@ interface MoviesProps {
 }
 
 export function App() {
-  const [movies, setMovies] = useState<MoviesProps[]>([]);
+  const [movies, setMovies] = useState<MovieProps[]>([]);
+  const [loading, setLoading] = useState(false);
 
   function getMovies() {
+    setLoading(true);
+
     axios({
       method: "get",
       url: "https://api.themoviedb.org/3/discover/movie",
@@ -24,6 +26,7 @@ export function App() {
       },
     }).then((response) => {
       setMovies(response.data.results);
+      setLoading(false);
     });
   }
 
@@ -44,29 +47,15 @@ export function App() {
                 type="text"
                 placeholder="Search Movie"
               />
-              <button className="text-white border rounded-md" type="submit">Search</button>
+              <button className="text-white border rounded-md" type="submit">
+                Search
+              </button>
             </div>
           </div>
         </nav>
       </header>
 
-      <ul className="max-w-7xl my-4 mx-auto flex justify-between flex-wrap">
-        {movies.map((movie, index) => (
-          <li className="w-56 h-85" key={index}>
-            <img
-              className="object-cover w-full h-64"
-              src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-            />
-            <span>{movie.vote_average}%</span>
-            <h2 className="font-bold">{movie.title}</h2>
-            <span>
-              {format(movie.release_date, "dd 'de' MMMM 'de' yyyy", {
-                locale: ptBR,
-              })}
-            </span>
-          </li>
-        ))}
-      </ul>
+      <Movies movies={movies} loading={loading} />
     </>
   );
 }
