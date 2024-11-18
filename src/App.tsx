@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Logo from "./logo.svg";
 import { Movies } from "./components/Movies";
+import { Pagination } from "./components/Pagination";
 
 export interface MovieProps {
   title: string;
@@ -13,8 +14,8 @@ export interface MovieProps {
 export function App() {
   const [movies, setMovies] = useState<MovieProps[]>([]);
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1)
-  const [moviesPerPage, setMoviesPerPage] = useState(20)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [moviesPerPage] = useState(5);
 
   function getMovies() {
     setLoading(true);
@@ -37,9 +38,14 @@ export function App() {
   }, []);
 
   // Get current movies
-  const indexOfLastMovie = currentPage * moviesPerPage
-  const indexOfFirstMovie = indexOfLastMovie - moviesPerPage
-  const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie)
+  const indexOfLastMovie = currentPage * moviesPerPage;
+  const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
+  const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
+
+  // Change page
+  function paginate(pageNumber: number) {
+    setCurrentPage(pageNumber);
+  }
 
   return (
     <>
@@ -63,6 +69,11 @@ export function App() {
       </header>
 
       <Movies movies={currentMovies} loading={loading} />
+      <Pagination
+        moviesPerPage={moviesPerPage}
+        totalMovies={movies.length}
+        paginate={paginate}
+      />
     </>
   );
 }
