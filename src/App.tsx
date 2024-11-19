@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Logo from "./logo.svg";
 import { Movies } from "./components/Movies";
 import { Pagination } from "./components/Pagination";
+import { NavBar } from "./components/NavBar";
 
 export interface MovieProps {
   title: string;
@@ -15,7 +15,7 @@ export function App() {
   const [movies, setMovies] = useState<MovieProps[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [moviesPerPage] = useState(5);
+  const [moviesPerPage] = useState(20);
 
   function getMovies() {
     setLoading(true);
@@ -29,6 +29,7 @@ export function App() {
       },
     }).then((response) => {
       setMovies(response.data.results);
+      console.log(response.data);
       setLoading(false);
     });
   }
@@ -49,25 +50,7 @@ export function App() {
 
   return (
     <>
-      <header>
-        <nav className="bg-sky-950 py-5">
-          <div className="max-w-7xl flex items-center justify-between my-0 mx-auto">
-            <img src={Logo} className="w-37 h-5" />
-
-            <div>
-              <input
-                className="mr-2 text-black rounded-md outline-none"
-                type="text"
-                placeholder="Search Movie"
-              />
-              <button className="text-white border rounded-md" type="submit">
-                Search
-              </button>
-            </div>
-          </div>
-        </nav>
-      </header>
-
+      <NavBar />
       <Movies movies={currentMovies} loading={loading} />
       <Pagination
         moviesPerPage={moviesPerPage}
