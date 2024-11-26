@@ -14,49 +14,77 @@ export interface MovieProps {
 export function App() {
   const [movies, setMovies] = useState<MovieProps[]>([]);
   const [loading, setLoading] = useState(false);
+  const moviesPerPage = 20;
+
+  // working on pagination here
+  const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [moviesPerPage] = useState(20);
 
   function getMovies() {
     setLoading(true);
 
     axios({
       method: "get",
-      url: "https://api.themoviedb.org/3/discover/movie",
+      url: "https://api.themoviedb.org/3/search/movie",
       params: {
         api_key: "0a402cff78047e395e95defbf2f582ba",
         language: "pt-BR",
+        query: "batman",
       },
     }).then((response) => {
       setMovies(response.data.results);
-      console.log(response.data);
+      setTotalResults(response.data.total_results);
+      console.log(response.data.results);
       setLoading(false);
     });
   }
 
   useEffect(() => {
-    getMovies();
-  }, []);
+    getMovies()
+  }, [])
 
   // Get current movies
   const indexOfLastMovie = currentPage * moviesPerPage;
   const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
   const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
 
-  // Change page
-  function paginate(pageNumber: number) {
-    setCurrentPage(pageNumber);
+  // working on pagination here
+  function nextPage(pageNumber: number) {
+    setLoading(true);
+
+    axios({
+      method: "get",
+      url: "https://api.themoviedb.org/3/search/movie",
+      params: {
+        api_key: "0a402cff78047e395e95defbf2f582ba",
+        language: "pt-BR",
+        query: "batman",
+        page: pageNumber,
+      },
+    }).then((response) => {
+      setMovies(response.data.results);
+      setCurrentPage(pageNumber);
+      console.log(response.data.results);
+      setLoading(false);
+    });
   }
+
+  // working on pagination here
+  const numberPages = Math.floor(totalResults / moviesPerPage);
 
   return (
     <>
       <NavBar />
       <Movies movies={currentMovies} loading={loading} />
-      <Pagination
-        moviesPerPage={moviesPerPage}
-        totalMovies={movies.length}
-        paginate={paginate}
-      />
+      {totalResults > 20 ? (
+        <Pagination
+          currentPage={currentPage}
+          pages={numberPages}
+          nextPage={nextPage}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 }
