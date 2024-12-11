@@ -1,10 +1,17 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Movies } from "./components/Movies";
 import { Pagination } from "./components/Pagination";
 import { NavBar } from "./components/NavBar";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
+import { MoviesList } from "./components/MoviesList";
 
-export interface MovieProps {
+export interface MovieResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number; // not using yet
+}
+
+interface Movie {
   title: string;
   poster_path: string;
   release_date: string;
@@ -12,78 +19,39 @@ export interface MovieProps {
 }
 
 export function App() {
-  const [movies, setMovies] = useState<MovieProps[]>([]);
-  const [loading, setLoading] = useState(false);
-  const moviesPerPage = 20;
+  const [searchParams] = useSearchParams();
 
-  // working on pagination here
-  const [totalResults, setTotalResults] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
+  const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
 
-  function getMovies() {
-    setLoading(true);
+  const { data: moviesResponse, isLoading } = useQuery<MovieResponse>({
+    queryKey: ["get-movies", page],
+    queryFn: async () => {
+      const response = await fetch(
+        `https://api.themoviedb.org/3/discover/movie?api_key=0a402cff78047e395e95defbf2f582ba&page=${page}`
+      );
+      const data = response.json();
 
-    axios({
-      method: "get",
-      url: "https://api.themoviedb.org/3/search/movie",
-      params: {
-        api_key: "0a402cff78047e395e95defbf2f582ba",
-        language: "pt-BR",
-        query: "batman",
-      },
-    }).then((response) => {
-      setMovies(response.data.results);
-      setTotalResults(response.data.total_results);
-      console.log(response.data.results);
-      setLoading(false);
-    });
+      console.log(data);
+
+      return data;
+    },
+    placeholderData: keepPreviousData,
+  });
+
+  if (isLoading) {
+    return null;
   }
-
-  useEffect(() => {
-    getMovies()
-  }, [])
-
-  // Get current movies
-  const indexOfLastMovie = currentPage * moviesPerPage;
-  const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
-  const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
-
-  // working on pagination here
-  function nextPage(pageNumber: number) {
-    setLoading(true);
-
-    axios({
-      method: "get",
-      url: "https://api.themoviedb.org/3/search/movie",
-      params: {
-        api_key: "0a402cff78047e395e95defbf2f582ba",
-        language: "pt-BR",
-        query: "batman",
-        page: pageNumber,
-      },
-    }).then((response) => {
-      setMovies(response.data.results);
-      setCurrentPage(pageNumber);
-      console.log(response.data.results);
-      setLoading(false);
-    });
-  }
-
-  // working on pagination here
-  const numberPages = Math.floor(totalResults / moviesPerPage);
 
   return (
     <>
       <NavBar />
-      <Movies movies={currentMovies} loading={loading} />
-      {totalResults > 20 ? (
+      <MoviesList moviesResponse={moviesResponse} />
+
+      {moviesResponse && (
         <Pagination
-          currentPage={currentPage}
-          pages={numberPages}
-          nextPage={nextPage}
+          pages={moviesResponse.total_pages}
+          page={moviesResponse.page}
         />
-      ) : (
-        ""
       )}
     </>
   );

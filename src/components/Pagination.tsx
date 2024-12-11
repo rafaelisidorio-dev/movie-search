@@ -1,37 +1,66 @@
+import { useSearchParams } from "react-router-dom";
+
 interface PaginationProps {
-  nextPage: (pageNumber: number) => void;
   pages: number;
-  currentPage: number;
+  page: number;
 }
 
-export function Pagination({ pages, nextPage, currentPage }: PaginationProps) {
-  const pageLinks: JSX.Element[] = [];
+export function Pagination({ pages, page }: PaginationProps) {
+  const [, setSearchParams] = useSearchParams();
 
-  for (let i = 1; i <= pages + 1; i++) {
-    pageLinks.push(
-      <li
-        key={i}
-        onClick={() => nextPage(i)}
-        className="border border-black p-2 rounded-md"
-      >
-        <a href="#">{i}</a>
-      </li>
-    );
+  function firstPage() {
+    setSearchParams((params) => {
+      params.set("page", String((page = 1)));
+
+      return params;
+    });
+  }
+
+  function previousPage() {
+    if (page - 1 <= 0) {
+      return;
+    }
+
+    setSearchParams((params) => {
+      params.set("page", String(page - 1));
+
+      return params;
+    });
+  }
+
+  function nextPage() {
+    if (page + 1 > pages) {
+      return;
+    }
+
+    setSearchParams((params) => {
+      params.set("page", String(page + 1));
+
+      return params;
+    });
+  }
+
+  function lastPage() {
+    setSearchParams((params) => {
+      params.set("page", String(pages));
+
+      return params;
+    });
+  }
+
+  if (pages > 500) {
+    pages = 500;
   }
 
   return (
-    <nav>
-      <ul className="flex justify-center gap-2">
-        {/* {pageLinks.map((number) => (
-          <li key={number} className="border border-black p-2 rounded-md">
-            <a onClick={() => nextPage(number)} href="!#">
-              {number}
-            </a>
-          </li>
-        ))} */}
-
-        {pageLinks}
-      </ul>
-    </nav>
+    <div className="flex justify-center items-center gap-8">
+      <button onClick={firstPage}>1</button>
+      <button onClick={previousPage}>{"<"}</button>
+      <span>
+        {page} of {pages}
+      </span>
+      <button onClick={nextPage}>{">"}</button>
+      <button onClick={lastPage}>{pages}</button>
+    </div>
   );
 }
