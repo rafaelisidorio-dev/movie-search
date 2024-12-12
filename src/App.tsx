@@ -8,7 +8,6 @@ export interface MovieResponse {
   page: number;
   results: Movie[];
   total_pages: number;
-  total_results: number; // not using yet
 }
 
 interface Movie {
@@ -31,7 +30,7 @@ export function App() {
       );
       const data = response.json();
 
-      console.log(data);
+      console.log(moviesResponse);
 
       return data;
     },
@@ -45,7 +44,7 @@ export function App() {
   return (
     <>
       <NavBar />
-      <MoviesList moviesResponse={moviesResponse} />
+      <MoviesList moviesResponse={moviesResponse!} />
 
       {moviesResponse && (
         <Pagination
