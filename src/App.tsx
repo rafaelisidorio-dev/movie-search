@@ -3,6 +3,7 @@ import { NavBar } from "./components/NavBar";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { MoviesList } from "./components/MoviesList";
+import { createRef, FormEvent } from "react";
 
 export interface MovieResponse {
   page: number;
@@ -41,9 +42,21 @@ export function App() {
     return null;
   }
 
+  const inputRef = createRef<HTMLInputElement>()
+  let inputValue = ""
+
+  function handleSubmit(event: FormEvent) {
+    inputValue = String(inputRef.current?.value)
+    console.log(inputValue)
+
+    inputRef.current!.value = ""
+
+    event.preventDefault()
+  }
+
   return (
     <>
-      <NavBar />
+      <NavBar inputRef={inputRef} handleSubmit={handleSubmit} />
       <MoviesList moviesResponse={moviesResponse!} />
 
       {moviesResponse && (
