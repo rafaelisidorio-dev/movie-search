@@ -3,7 +3,7 @@ import { ptBR } from "date-fns/locale";
 import { MovieResponse } from "../App";
 
 interface MoviesListProps {
-  moviesResponse: MovieResponse;
+  moviesResponse?: MovieResponse;
 }
 
 export function MoviesList({ moviesResponse }: MoviesListProps) {
@@ -18,9 +18,7 @@ export function MoviesList({ moviesResponse }: MoviesListProps) {
           <span>{movie.vote_average}%</span>
           <h2 className="font-bold">{movie.title}</h2>
           <span>
-            {format(movie.release_date, "dd 'de' MMM 'de' yyyy", {
-              locale: ptBR,
-            })}
+            {movie.release_date.length > 0 ? format(movie.release_date, "dd 'de' MMM 'de' yyyy", { locale: ptBR }) : "2024-02-28"}
           </span>
         </li>
       ))}

@@ -1,12 +1,13 @@
-import { FormEvent } from "react";
+import { ChangeEvent } from "react";
 import Logo from "/logo.svg";
 
-interface NavBarProps {
-  inputRef: React.RefObject<HTMLInputElement>
-  handleSubmit: (event: FormEvent<Element>) => void
+interface Props {
+  formData: string;
+  setFormData: React.Dispatch<React.SetStateAction<string>>;
+  handleSubmit: (event: ChangeEvent<HTMLFormElement>) => void;
 }
 
-export function NavBar({ handleSubmit, inputRef }: NavBarProps) {
+export function NavBar({ formData, setFormData, handleSubmit }: Props) {
   return (
     <header>
       <nav className="bg-sky-950 py-5">
@@ -18,7 +19,8 @@ export function NavBar({ handleSubmit, inputRef }: NavBarProps) {
               className="mr-2 text-black rounded-md outline-none"
               type="text"
               placeholder="Search Movie"
-              ref={inputRef}
+              value={formData}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData(e.target.value)}
             />
             <button className="text-white border rounded-md" type="submit">
               Search

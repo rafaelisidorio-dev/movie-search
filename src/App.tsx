@@ -1,9 +1,8 @@
-import { Pagination } from "./components/Pagination";
 import { NavBar } from "./components/NavBar";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { MoviesList } from "./components/MoviesList";
-import { createRef, FormEvent } from "react";
+import { ChangeEvent, useState } from "react";
 
 export interface MovieResponse {
   page: number;
@@ -20,14 +19,16 @@ interface Movie {
 
 export function App() {
   const [searchParams] = useSearchParams();
+  const [formData, setFormData] = useState('')
 
-  const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
+  const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1
 
   const { data: moviesResponse, isLoading } = useQuery<MovieResponse>({
     queryKey: ["get-movies", page],
     queryFn: async () => {
       const response = await fetch(
-        `https://api.themoviedb.org/3/discover/movie?api_key=0a402cff78047e395e95defbf2f582ba&page=${page}`
+        //`https://api.themoviedb.org/3/discover/movie?api_key=0a402cff78047e395e95defbf2f582ba&page=${page}`
+        `https://api.themoviedb.org/3/search/movie?api_key=0a402cff78047e395e95defbf2f582ba&query=jack+the+ripper&page=${page}`
       );
       const data = response.json();
 
@@ -40,31 +41,21 @@ export function App() {
 
   if (isLoading) {
     return null;
-  }
+  };
 
-  const inputRef = createRef<HTMLInputElement>()
-  let inputValue = ""
 
-  function handleSubmit(event: FormEvent) {
-    inputValue = String(inputRef.current?.value)
-    console.log(inputValue)
-
-    inputRef.current!.value = ""
-
+  function handleSubmit(event: ChangeEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (!formData) return;
+
+    console.log(formData)
+    setFormData('')
   }
 
   return (
     <>
-      <NavBar inputRef={inputRef} handleSubmit={handleSubmit} />
+      <NavBar formData={formData} setFormData={setFormData} handleSubmit={handleSubmit} />
       <MoviesList moviesResponse={moviesResponse!} />
-
-      {moviesResponse && (
-        <Pagination
-          pages={moviesResponse.total_pages}
-          page={moviesResponse.page}
-        />
-      )}
     </>
   );
 }
