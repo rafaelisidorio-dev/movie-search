@@ -1,15 +1,15 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { MovieResponse } from "../App";
+import { MoviesProps } from "../App";
 
 interface MoviesListProps {
-  moviesResponse?: MovieResponse;
+  movies: MoviesProps;
 }
 
-export function MoviesList({ moviesResponse }: MoviesListProps) {
+export function MoviesList({ movies }: MoviesListProps) {
   return (
     <ul className="max-w-7xl my-4 mx-auto flex justify-evenly flex-wrap">
-      {moviesResponse?.results.map((movie, index) => (
+      {movies?.results.map((movie, index) => (
         <li className="w-56 h-85" key={index}>
           <img
             className="object-cover w-full h-64"
