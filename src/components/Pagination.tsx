@@ -1,8 +1,10 @@
 import { useSearchParams } from "react-router-dom";
+import { MoviesProps } from "../App";
 
 interface PaginationProps {
   pages: number;
   page: number;
+  setMovies: React.Dispatch<React.SetStateAction<MoviesProps | undefined>>
 }
 
 export function Pagination({ pages, page }: PaginationProps) {

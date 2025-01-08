@@ -7,7 +7,11 @@ interface NavBarProps {
   handleSubmit: (event: ChangeEvent<HTMLFormElement>) => void;
 }
 
-export function NavBar({ movieSearch, setMovieSearch, handleSubmit }: NavBarProps) {
+export function NavBar({
+  movieSearch,
+  setMovieSearch,
+  handleSubmit,
+}: NavBarProps) {
   return (
     <header>
       <nav className="bg-sky-950 py-5">
@@ -19,7 +23,9 @@ export function NavBar({ movieSearch, setMovieSearch, handleSubmit }: NavBarProp
               className="mr-2 text-black rounded-md outline-none"
               type="text"
               placeholder="Search Movie"
-              onChange={(event: ChangeEvent<HTMLInputElement>) => setMovieSearch(event.target.value)}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setMovieSearch(event.target.value)
+              }
               value={movieSearch}
             />
             <button className="text-white border rounded-md" type="submit">

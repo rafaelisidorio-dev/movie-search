@@ -1,8 +1,10 @@
 import { NavBar } from "./components/NavBar";
-//import { keepPreviousData, useQuery } from "@tanstack/react-query";
-//import { useSearchParams } from "react-router-dom";
+// import { useQuery } from "@tanstack/react-query";
 import { MoviesList } from "./components/MoviesList";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Pagination } from "./components/Pagination";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
 
 export interface MoviesProps {
   page: number;
@@ -18,48 +20,47 @@ interface MovieProps {
 }
 
 export function App() {
-  {/*const [searchParams] = useSearchParams();
+  const [movies, setMovies] = useState<MoviesProps>();
+  const [movieSearch, setMovieSearch] = useState("");
 
-  const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
 
-  const { data: moviesResponse, isLoading } = useQuery<MovieResponse>({
-    queryKey: ["get-movies", page],
-    queryFn: async () => {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/discover/movie?api_key=0a402cff78047e395e95defbf2f582ba&page=${page}`
-        //`https://api.themoviedb.org/3/search/movie?api_key=0a402cff78047e395e95defbf2f582ba&query=1888&page=${page}`
-      );
-      const data = response.json();
-
-      console.log(moviesResponse);
-
-      return data;
-    },
-    placeholderData: keepPreviousData,
-  });
-
-  if (isLoading) {
-    return null;
-  };*/}
-
-  const [movies, setMovies] = useState<MoviesProps>()
-  const [movieSearch, setMovieSearch] = useState("")
+  useEffect(() => {
+    axios
+      .get("https://api.themoviedb.org/3/discover/movie", {
+        params: {
+          api_key: "0a402cff78047e395e95defbf2f582ba",
+          page: page,
+        },
+      })
+      .then((response) => {
+        setMovies(response.data);
+        console.log(response.data);
+      });
+  }, [page]);
 
   function handleSubmit(event: ChangeEvent<HTMLFormElement>) {
-    event.preventDefault()
+    event.preventDefault();
 
     if (!movieSearch) {
-      return
+      return;
     }
 
-    fetch(`https://api.themoviedb.org/3/search/movie?api_key=0a402cff78047e395e95defbf2f582ba&query=${movieSearch}`)
-      .then(response => response.json())
-      .then(data => {
-        setMovies(data)
-        console.log(data)
+    axios
+      .get("https://api.themoviedb.org/3/search/movie", {
+        params: {
+          api_key: "0a402cff78047e395e95defbf2f582ba",
+          query: movieSearch,
+          page: page,
+        },
       })
+      .then((response) => {
+        setMovies(response.data);
+        console.log(response.data);
+      });
 
-    setMovieSearch("")
+    setMovieSearch("");
   }
 
   return (
@@ -69,9 +70,14 @@ export function App() {
         setMovieSearch={setMovieSearch}
         handleSubmit={handleSubmit}
       />
-      <MoviesList
-        movies={movies!}
-      />
+
+      {movies ? (
+        <MoviesList movies={movies!} />
+      ) : (
+        <h1 className="text-center text-xl m-4 font-bold">Loading...</h1>
+      )}
+
+      {movies && <Pagination page={page} pages={movies?.total_pages!} setMovies={setMovies} />}
     </>
   );
 }
