@@ -1,5 +1,4 @@
 import { NavBar } from "./components/NavBar";
-// import { useQuery } from "@tanstack/react-query";
 import { MoviesList } from "./components/MoviesList";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Pagination } from "./components/Pagination";
@@ -77,7 +76,7 @@ export function App() {
         <h1 className="text-center text-xl m-4 font-bold">Loading...</h1>
       )}
 
-      {movies && <Pagination page={page} pages={movies?.total_pages!} setMovies={setMovies} />}
+      {movies && <Pagination page={page} pages={movies?.total_pages!} />}
     </>
   );
 }
