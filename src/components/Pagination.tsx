@@ -1,12 +1,13 @@
-import { useSearchParams } from "react-router-dom";
+import { SetURLSearchParams } from "react-router-dom";
 
 interface PaginationProps {
   pages: number;
   page: number;
+  setSearchParams: SetURLSearchParams;
 }
 
-export function Pagination({ pages, page }: PaginationProps) {
-  const [, setSearchParams] = useSearchParams();
+export function Pagination({ pages, page, setSearchParams }: PaginationProps) {
+  //const [, setSearchParams] = useSearchParams();
 
   function firstPage() {
     setSearchParams((params) => {
