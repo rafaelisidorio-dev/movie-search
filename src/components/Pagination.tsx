@@ -7,8 +7,6 @@ interface PaginationProps {
 }
 
 export function Pagination({ pages, page, setSearchParams }: PaginationProps) {
-  //const [, setSearchParams] = useSearchParams();
-
   function firstPage() {
     setSearchParams((params) => {
       params.set("page", String((page = 1)));

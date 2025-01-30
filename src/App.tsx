@@ -25,6 +25,7 @@ export function App() {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
 
+  // TODO: Bug fix, this function isn't working
   // Reset page to 1 when changing search
   function onChangeSearch() {
     setSearchParams((params) => {
@@ -54,8 +55,6 @@ export function App() {
         console.log(response.data);
       })
       .catch((error) => console.error(error));
-
-    console.log(page);
   }, [searchTerm, page]);
 
   return (
