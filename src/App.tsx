@@ -1,7 +1,7 @@
 import { NavBar } from "./components/NavBar";
 import { MoviesList } from "./components/MoviesList";
 import { useEffect, useState } from "react";
-import { Pagination } from "./components/Pagination";
+// import { Pagination } from "./components/Pagination";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 
@@ -61,19 +61,30 @@ export function App() {
     <>
       <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-      {movies ? (
-        <MoviesList movies={movies!} />
-      ) : (
-        <h1 className="text-center text-xl m-4 font-bold">Loading...</h1>
-      )}
+      {searchTerm.length > 0 && <MoviesList movies={movies!} />}
 
-      {movies && (
-        <Pagination
-          page={page}
-          pages={movies?.total_pages!}
-          setSearchParams={setSearchParams}
-        />
-      )}
+      {/*<footer>
+        <div className="text-primary-white">
+          EMTMovies©2024
+          <br />
+          Developed By : Mokete Tyabekana
+        </div>
+
+        <div className="text-primary-white">
+          Follow Me <FaLinkedin /> <FaXTwitter /> <FaGithub /> <FaFacebook />{" "}
+          <FaInstagram />
+        </div>
+      </footer>*/}
+
+      {/* <footer>
+        {movies && (
+          <Pagination
+            page={page}
+            pages={movies?.total_pages!}
+            setSearchParams={setSearchParams}
+          />
+        )}
+      </footer> */}
     </>
   );
 }
