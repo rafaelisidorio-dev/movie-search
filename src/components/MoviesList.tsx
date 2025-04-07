@@ -8,22 +8,27 @@ interface MoviesListProps {
 
 export function MoviesList({ movies }: MoviesListProps) {
   return (
-    <ul className="max-w-7xl my-4 mx-auto flex justify-evenly flex-wrap">
+    <ul className="grid grid-cols-5 gap-8">
       {movies?.results.map((movie, index) => (
-        <li className="w-56 h-85 text-primary-white" key={index}>
+        <li
+          className="w-full text-black leading-5 border border-gray-300 rounded-md shadow-md overflow-hidden"
+          key={index}
+        >
           <img
-            className="object-cover w-full h-64"
+            className="object-cover"
             src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
           />
-          <span>{movie.vote_average}%</span>
-          <h2 className="font-bold">{movie.title}</h2>
-          <span>
-            {movie.release_date.length > 0
-              ? format(movie.release_date, "dd 'de' MMM 'de' yyyy", {
-                  locale: ptBR,
-                })
-              : "2024-02-28"}
-          </span>
+          <div className="p-3">
+            {/* <span>{movie.vote_average}%</span> */}
+            <h2 className="font-bold">{movie.title}</h2>
+            <span className="text-[rgba(0,0,0,.6)]">
+              {movie.release_date.length > 0
+                ? format(movie.release_date, "dd 'de' MMM 'de' yyyy", {
+                    locale: ptBR,
+                  })
+                : "2024-02-28"}
+            </span>
+          </div>
         </li>
       ))}
     </ul>

@@ -1,9 +1,10 @@
 import { NavBar } from "./components/NavBar";
 import { MoviesList } from "./components/MoviesList";
 import { useEffect, useState } from "react";
-// import { Pagination } from "./components/Pagination";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+
+import logoFooter from "/logo-footer.svg";
 
 export interface MoviesProps {
   page: number;
@@ -58,33 +59,16 @@ export function App() {
   }, [searchTerm, page]);
 
   return (
-    <>
+    <div>
       <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-      {searchTerm.length > 0 && <MoviesList movies={movies!} />}
+      <main className="p-6">
+        {searchTerm.length > 0 && <MoviesList movies={movies!} />}
+      </main>
 
-      {/*<footer>
-        <div className="text-primary-white">
-          EMTMovies©2024
-          <br />
-          Developed By : Mokete Tyabekana
-        </div>
-
-        <div className="text-primary-white">
-          Follow Me <FaLinkedin /> <FaXTwitter /> <FaGithub /> <FaFacebook />{" "}
-          <FaInstagram />
-        </div>
-      </footer>*/}
-
-      {/* <footer>
-        {movies && (
-          <Pagination
-            page={page}
-            pages={movies?.total_pages!}
-            setSearchParams={setSearchParams}
-          />
-        )}
-      </footer> */}
-    </>
+      <footer className="w-full bg-[rgba(3,37,65,1)] bottom-0 flex items-center justify-center py-5">
+        <img className="w-[130px] h-[94px]" src={logoFooter} />
+      </footer>
+    </div>
   );
 }
