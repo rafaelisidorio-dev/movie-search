@@ -8,10 +8,10 @@ interface MoviesListProps {
 
 export function MoviesList({ movies }: MoviesListProps) {
   return (
-    <ul className="grid grid-cols-5 gap-8">
+    <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
       {movies?.results.map((movie, index) => (
         <li
-          className="w-full text-black leading-5 border border-gray-300 rounded-md shadow-md overflow-hidden"
+          className="text-black leading-5 border border-gray-300 rounded-md shadow-md overflow-hidden"
           key={index}
         >
           <img
@@ -19,7 +19,7 @@ export function MoviesList({ movies }: MoviesListProps) {
             src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
           />
           <div className="p-3">
-            {/* <span>{movie.vote_average}%</span> */}
+            <span>{movie.vote_average}%</span>
             <h2 className="font-bold">{movie.title}</h2>
             <span className="text-[rgba(0,0,0,.6)]">
               {movie.release_date.length > 0

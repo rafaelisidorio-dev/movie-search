@@ -62,8 +62,8 @@ export function App() {
     <div>
       <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-      <main className="p-6">
-        {searchTerm.length > 0 && <MoviesList movies={movies!} />}
+      <main className="p-8 md:p-6">
+        <MoviesList movies={movies!} />
       </main>
 
       <footer className="w-full bg-[rgba(3,37,65,1)] bottom-0 flex items-center justify-center py-5">

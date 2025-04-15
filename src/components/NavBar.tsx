@@ -10,10 +10,10 @@ export function NavBar({ searchTerm, setSearchTerm }: NavBarProps) {
   return (
     <header>
       <nav className="bg-[rgba(3,37,65,1)] py-5">
-        <div className="max-w-6xl flex items-center justify-between mx-auto">
+        <div className="flex items-center justify-between gap-2 sm:gap-0 mx-8 md:mx-6">
           <img className="w-[154px] h-[20px]" src={logo} />
 
-          <div className="flex items-center gap-8">
+          <div className="hidden md:flex md:items-center md:gap-8 ">
             <a href="#" className="text-base text-primary-white font-semibold">
               Filmes
             </a>
@@ -29,7 +29,7 @@ export function NavBar({ searchTerm, setSearchTerm }: NavBarProps) {
           </div>
 
           <input
-            className="text-primary-white pl-1 rounded bg-transparent border border-primary-white"
+            className="w-2/4 sm:w-fit text-primary-white pl-1 rounded bg-transparent border border-primary-white"
             type="text"
             placeholder="Digite algo..."
             value={searchTerm}
